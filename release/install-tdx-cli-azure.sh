@@ -35,8 +35,8 @@ CLI_VERSION=$(curl  --silent  https://api.github.com/repos/${REPO_URL}/releases/
 fi
 readonly INSTALL_DIRECTORY=/usr/bin
 readonly TAR_NAME="trustauthority-cli-azure-${CLI_VERSION}.tar.gz"
-readonly OS_DISTRO=$(cat /etc/os-release  | grep "^ID=" | sed -e "s/ID=//g")
-readonly OS_DISTRO_VERSION=$(cat /etc/os-release  | grep "^VERSION_ID=" | tr -d '"' | sed -e "s/^VERSION_ID=\(\s\+\)\?\(.*\)\(\s\+\)\?$/\2/g")
+readonly OS_DISTRO=$(cat /etc/os-release  | grep "^ID=" | sed -e "s/ID=//g" -e "s/\"//g")
+readonly OS_DISTRO_VERSION=$(cat /etc/os-release  | grep "^VERSION_ID=" | tr -d '"' | sed -e "s/^VERSION_ID=\(\s\+\)\?\(.*\)\(\s\+\)\?$/\2/g" -e "s/\"//g")
 readonly README_LINK="https://github.com/${REPO_URL}/tree/azure-tdx-preview/tdx-cli"
 readonly CLI_BIN=$(curl -s ${RAW_MAKEFILE}  | grep "^APPNAME.*=" | sed -e "s/APPNAME.*=\(\s\+\)\?//g")
 readonly URL="https://github.com/${REPO_URL}/releases/download/${CLI_VERSION}/${TAR_NAME}"
@@ -58,7 +58,6 @@ if ! curl -sIf "${URL}" > /dev/null; then
     printf "\n%b%s - %s is not found%b\n\n" "${CODE_ERROR}" "${CLI_NAME}" "${URL}" "${CODE_NC}"
     print_error_and_exit
 fi
-
 
 if [ "${OS_DISTRO}" == "ubuntu" ] && [ "${OS_DISTRO_VERSION}" == "20.04" ]; then
     apt-get -qq install tpm2-tools=4.1.1-1ubuntu0.20.04.1 -y || print_error_and_exit
