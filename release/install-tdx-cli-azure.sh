@@ -66,7 +66,7 @@ elif [ "${OS_DISTRO}" == "ubuntu" ] && [ "${OS_DISTRO_VERSION}" == "22.04" ]; th
 elif [ "${OS_DISTRO}" == "rhel" ]; then
     dnf install tpm2-tools libtss2-tcti-device0 -y || print_error_and_exit
 elif ( [[ "${OS_DISTRO}" == "opensuse"* ]] || [ "${OS_DISTRO}" == "sles" ] ) && [ "${OS_DISTRO_VERSION}" == "15.5" ]; then
-    zypper install tpm2.0-tools=5.2-150400.4.6 libtss2-tcti-device0=3.1.0-150400.3.3.1 -y || print_error_and_exit
+    zypper install -y tpm2.0-tools=5.2-150400.4.6 libtss2-tcti-device0=3.1.0-150400.3.3.1 || print_error_and_exit
 else 
     printf "\n%bUnsupported Linux Distribution - %s-%s %b\n\n" "${CODE_ERROR}" "${OS_DISTRO}" "${OS_DISTRO_VERSION}" "${CODE_NC}"
     print_error_and_exit
