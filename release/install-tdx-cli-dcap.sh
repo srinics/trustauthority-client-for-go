@@ -30,7 +30,7 @@ readonly OS=$(uname)
 readonly REPO_URL="srinics/trustauthority-client-for-go"
 readonly RAW_MAKEFILE="https://raw.githubusercontent.com/${REPO_URL}/main/tdx-cli/Makefile"
 if [ -z "${CLI_VERSION}" ]; then
-CLI_VERSION=$(curl  --silent  https://api.github.com/repos/${REPO_URL}/releases/latest | grep -Po '"tag_name": "\K.*?(?=")')
+    CLI_VERSION=$(curl  --silent  https://api.github.com/repos/${REPO_URL}/releases/latest | grep -Po '"tag_name": "\K.*?(?=")')
 fi
 readonly INSTALL_DIRECTORY=/usr/bin
 readonly OS_DISTRO=$(cat /etc/os-release  | grep "^ID=" | sed -e "s/^ID=\(\s\+\)\?\(.*\)\(\s\+\)\?$/\2/g" -e "s/\"//g")
@@ -45,28 +45,28 @@ readonly CLI_NAME="Intel Trust Authority Client for ${OS_DISTRO^^}"
 
 installation_intrupted()
 {
-    printf "\n%b%s Installation intruputed by signal !!%b\n\n" "${CODE_ERROR}" "${CLI_NAME}" "${CODE_NC}"
+    printf "\n%b%s Installation interrupted by signal !!%b\n\n" "${CODE_ERROR}" "${CLI_NAME}" "${CODE_NC}"
 }
 
 
-if [ "${OS}" != "Linux" ]; then
-    printf "\n%bUnsupported OS Distribution - %s %b\n\n" "${CODE_ERROR}" "${OS}" "${CODE_NC}"
-    print_error_and_exit
-fi
-
-if [ "${OS_DISTRO}" == "ubuntu" ] && [ "${OS_DISTRO_VERSION}" == "20.04" ]; then
-    echo 'deb [arch=amd64] https://download.01.org/intel-sgx/sgx_repo/ubuntu focal main' | tee /etc/apt/sources.list.d/intel-sgx.list || print_error_and_exit
-    pushd /tmp > /dev/null
-    wget -qO - https://download.01.org/intel-sgx/sgx_repo/ubuntu/intel-sgx-deb.key | apt-key add  || print_error_and_exit
-    rm -f intel-sgx-deb.key
-    popd
-elif [ "${OS_DISTRO}" == "ubuntu" ] && [ "${OS_DISTRO_VERSION}" == "22.04" ]; then
-    echo 'deb [signed-by=/etc/apt/keyrings/intel-sgx-keyring.asc arch=amd64] https://download.01.org/intel-sgx/sgx_repo/ubuntu jammy main' | tee /etc/apt/sources.list.d/intel-sgx.list || print_error_and_exit
-    pushd /tmp > /dev/null
-    wget -qO - https://download.01.org/intel-sgx/sgx_repo/ubuntu/intel-sgx-deb.key || print_error_and_exit
-    cat intel-sgx-deb.key | tee /etc/apt/keyrings/intel-sgx-keyring.asc > /dev/null || print_error_and_exit
-    rm -f intel-sgx-deb.key
-    popd
+if [ "${OS_DISTRO}" == "ubuntu" ]; then
+    if [ "${OS_DISTRO_VERSION}" == "20.04" ]; then
+        echo 'deb [arch=amd64] https://download.01.org/intel-sgx/sgx_repo/ubuntu focal main' | tee /etc/apt/sources.list.d/intel-sgx.list || print_error_and_exit
+        pushd /tmp > /dev/null
+        wget -qO - https://download.01.org/intel-sgx/sgx_repo/ubuntu/intel-sgx-deb.key | apt-key add  || print_error_and_exit
+        rm -f intel-sgx-deb.key
+        popd
+    elif [ "${OS_DISTRO_VERSION}" == "22.04" ]; then
+        echo 'deb [signed-by=/etc/apt/keyrings/intel-sgx-keyring.asc arch=amd64] https://download.01.org/intel-sgx/sgx_repo/ubuntu jammy main' | tee /etc/apt/sources.list.d/intel-sgx.list || print_error_and_exit
+        pushd /tmp > /dev/null
+        wget -qO - https://download.01.org/intel-sgx/sgx_repo/ubuntu/intel-sgx-deb.key || print_error_and_exit
+        cat intel-sgx-deb.key | tee /etc/apt/keyrings/intel-sgx-keyring.asc > /dev/null || print_error_and_exit
+        rm -f intel-sgx-deb.key
+        popd
+    else 
+        printf "\n%bUnsupported Linux Distribution - %s-%s %b\n\n" "${CODE_ERROR}" "${OS_DISTRO}" "${OS_DISTRO_VERSION}" "${CODE_NC}"
+        print_error_and_exit
+    fi
 elif [ "${OS_DISTRO}" == "rhel" ] && [ "${OS_DISTRO_VERSION}" = "9.2" ]; then
     pushd /tmp > /dev/null
     wget -q0 - https://download.01.org/intel-sgx/latest/linux-latest/distro/${OS_DISTRO}${OS_DISTRO_VERSION}-server/sgx_rpm_local_repo.tgz || print_error_and_exit
@@ -104,7 +104,7 @@ if ! curl -sIf "${URL}" > /dev/null; then
 fi
 
 pushd /tmp > /dev/null
-#To ensure proviously downloaded removed
+#If already cli tar available, removing it
 if [ -f ${TAR_NAME} ]; then
     rm -r ${TAR_NAME} 
 fi
@@ -113,7 +113,7 @@ tar xvf "${TAR_NAME}" -C "${INSTALL_DIRECTORY}" > /dev/null || print_error_and_e
 rm -rf "${TAR_NAME}"
 popd > /dev/null
 
-printf "\n%s binary installated in %s%s\n\n" "${CLI_NAME}" "${INSTALL_DIRECTORY}/${CLI_BIN}"
-printf "\n%b%s Installation successful !!%b\n\n" "${CODE_OK}" "${CLI_NAME}" "${CODE_NC}"
+printf "\n%s installed in %s%s\n\n" "${CLI_NAME}" "${INSTALL_DIRECTORY}/${CLI_BIN}"
+printf "\n%b%s installation successful !!%b\n\n" "${CODE_OK}" "${CLI_NAME}" "${CODE_NC}"
 printf "\nFor usage %s please refer %s\n\n" "${CLI_NAME}" "${README_LINK}"
 exit 0

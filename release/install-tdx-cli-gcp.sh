@@ -31,17 +31,17 @@ readonly REPO_URL="srinics/trustauthority-client-for-go"
 readonly CLI_NAME="Intel Trust Authority Client for GCP"
 readonly RAW_MAKEFILE="https://raw.githubusercontent.com/${REPO_URL}/main/tdx-cli/Makefile"
 if [ -z "${CLI_VERSION}" ]; then
-CLI_VERSION=$(curl  --silent  https://api.github.com/repos/${REPO_URL}/releases/latest | grep -Po '"tag_name": "\K.*?(?=")')
+    CLI_VERSION=$(curl  --silent  https://api.github.com/repos/${REPO_URL}/releases/latest | grep -Po '"tag_name": "\K.*?(?=")')
 fi
 readonly INSTALL_DIRECTORY=/usr/bin
 readonly TAR_NAME="trustauthority-cli-gcp-${CLI_VERSION}.tar.gz"
-readonly README_LINK="https://github.com/${REPO_URL}/tree/gcp-tdx-preview/tdx-cli"
+readonly README_LINK="https://github.com/${REPO_URL}/tree/gcp-tdx-preview/tdx-cli#usage"
 readonly CLI_BIN=$(curl -s ${RAW_MAKEFILE}  | grep "^APPNAME.*=" | sed -e "s/APPNAME.*=\(\s\+\)\?//g")
 readonly URL="https://github.com/${REPO_URL}/releases/download/${CLI_VERSION}/${TAR_NAME}"
 
 installation_intrupted()
 {
-    printf "\n%b%s Installation intruputed by signal !!%b\n\n" "${CODE_ERROR}" "${CLI_NAME}" "${CODE_NC}"
+    printf "\n%b%s installation interrupted by signal !!%b\n\n" "${CODE_ERROR}" "${CLI_NAME}" "${CODE_NC}"
 }
 
 if [ "${OS}" != "Linux" ]; then
@@ -58,7 +58,7 @@ if ! curl -sIf "${URL}" > /dev/null; then
 fi
 
 pushd /tmp > /dev/null
-#To ensure proviously downloaded removed
+#If already cli tar available, removing it
 if [ -f ${TAR_NAME} ]; then
     rm -r ${TAR_NAME} 
 fi
@@ -67,7 +67,7 @@ tar xvf "${TAR_NAME}" -C "${INSTALL_DIRECTORY}" > /dev/null || print_error_and_e
 rm -rf "${TAR_NAME}"
 popd > /dev/null
 
-printf "\n%s binary installated in %s%s\n\n" "${CLI_NAME}" "${INSTALL_DIRECTORY}/${CLI_BIN}"
-printf "\n%b%s Installation successful !!%b\n\n" "${CODE_OK}" "${CLI_NAME}" "${CODE_NC}"
+printf "\n%s installed in %s%s\n\n" "${CLI_NAME}" "${INSTALL_DIRECTORY}/${CLI_BIN}"
+printf "\n%b%s installation successful !!%b\n\n" "${CODE_OK}" "${CLI_NAME}" "${CODE_NC}"
 printf "\nFor usage %s please refer %s\n\n" "${CLI_NAME}" "${README_LINK}"
 exit 0
