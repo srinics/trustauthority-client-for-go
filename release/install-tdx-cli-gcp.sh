@@ -26,7 +26,6 @@ print_error_and_exit()
 trap 'installation_intrupted' 1 2 3 6
 
 readonly OS=$(uname)
-#TODO need to change REPO_URL
 readonly REPO_URL="srinics/trustauthority-client-for-go"
 readonly CLI_NAME="Intel Trust Authority Client for GCP"
 readonly RAW_MAKEFILE="https://raw.githubusercontent.com/${REPO_URL}/main/tdx-cli/Makefile"

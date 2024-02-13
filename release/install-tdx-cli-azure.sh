@@ -27,9 +27,8 @@ print_error_and_exit()
 trap 'installation_intrupted' 1 2 3 6
 
 readonly OS=$(uname)
-#TODO need to change REPO_URL
 readonly REPO_URL="srinics/trustauthority-client-for-go"
-readonly CLI_NAME="Intel Trust Authority Cliect for Azure"
+readonly CLI_NAME="Intel Trust Authority Client for Azure"
 readonly RAW_MAKEFILE="https://raw.githubusercontent.com/${REPO_URL}/main/tdx-cli/Makefile"
 if [ -z "${CLI_VERSION}" ]; then
     CLI_VERSION=$(curl  --silent  https://api.github.com/repos/${REPO_URL}/releases/latest | grep -Po '"tag_name": "\K.*?(?=")')
@@ -64,7 +63,7 @@ if [ "${OS_DISTRO}" == "ubuntu" ]; then
         printf "\n%bUnsupported Linux Distribution - %s-%s %b\n\n" "${CODE_ERROR}" "${OS_DISTRO}" "${OS_DISTRO_VERSION}" "${CODE_NC}"
         print_error_and_exit
     fi
-elif ( [[ "${OS_DISTRO}" == "opensuse"* ]] || [ "${OS_DISTRO}" == "sles" ] ) && [ "${OS_DISTRO_VERSION}" == "15.5" ]; then
+elif ( [[ "${OS_DISTRO}" == "opensuse"* ]] || [ "${OS_DISTRO}" == "sles" ] ) && [ "${OS_DISTRO_VERSION}" == "15.5" ]; then 
     zypper install -y tpm2.0-tools=5.2-150400.4.6 libtss2-tcti-device0=3.1.0-150400.3.3.1 || print_error_and_exit
 else 
     printf "\n%bUnsupported Linux Distribution - %s-%s %b\n\n" "${CODE_ERROR}" "${OS_DISTRO}" "${OS_DISTRO_VERSION}" "${CODE_NC}"

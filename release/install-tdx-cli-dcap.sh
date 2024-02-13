@@ -34,7 +34,7 @@ fi
 readonly INSTALL_DIRECTORY=/usr/bin
 readonly OS_DISTRO=$(cat /etc/os-release  | grep "^ID=" | sed -e "s/^ID=\(\s\+\)\?\(.*\)\(\s\+\)\?$/\2/g" -e "s/\"//g")
 readonly OS_DISTRO_VERSION=$(cat /etc/os-release  | grep "^VERSION_ID=" | tr -d '"' | sed -e "s/^VERSION_ID=\(\s\+\)\?\(.*\)\(\s\+\)\?$/\2/g" -e "s/\"//g")
-readonly TAR_NAME="trustauthority-cli-${OS_DISTRO}-${CLI_VERSION}.tar.gz"
+readonly TAR_NAME="trustauthority-cli-dcap-${CLI_VERSION}.tar.gz"
 readonly README_LINK="https://github.com/${REPO_URL}/tree/master/tdx-cli#usage"
 readonly CLI_BIN=$(curl -s ${RAW_MAKEFILE}  | grep "^APPNAME.*=" | sed -e "s/APPNAME.*=\(\s\+\)\?//g")
 readonly URL="https://github.com/${REPO_URL}/releases/download/${CLI_VERSION}/${TAR_NAME}"
