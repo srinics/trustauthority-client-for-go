@@ -55,7 +55,7 @@ if [ "${OS_DISTRO}" == "ubuntu" ]; then
     elif [ "${OS_DISTRO_VERSION}" == "22.04" ]; then
         echo 'deb [signed-by=/etc/apt/keyrings/intel-sgx-keyring.asc arch=amd64] https://download.01.org/intel-sgx/sgx_repo/ubuntu jammy main' | tee /etc/apt/sources.list.d/intel-sgx.list || print_error_and_exit
         pushd /tmp > /dev/null
-        wget -qO - https://download.01.org/intel-sgx/sgx_repo/ubuntu/intel-sgx-deb.key || print_error_and_exit
+        wget -qo - https://download.01.org/intel-sgx/sgx_repo/ubuntu/intel-sgx-deb.key || print_error_and_exit
         cat intel-sgx-deb.key | tee /etc/apt/keyrings/intel-sgx-keyring.asc > /dev/null || print_error_and_exit
         rm -f intel-sgx-deb.key
         popd
